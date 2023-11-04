@@ -104,6 +104,33 @@ type Dessert struct {
 	Price float64
 }
 
+// Strategy implementation
+type DeliverStrategy interface {
+	GetDeliverOption() string
+	Deliver(order *Order)
+}
+
+type HomeDeliveryStrategy struct{}
+
+func (home HomeDeliveryStrategy) GetDeliverOption() string {
+	return "1. Доставка до дома."
+}
+
+func (home HomeDeliveryStrategy) Deliver(order *Order) {
+	fmt.Println("Напишите пожалуйста ваш адрес: ")
+	fmt.Scan(&order.Address)
+}
+
+type PickUpStrategy struct{}
+
+func (p PickUpStrategy) GetDeliverOption() string {
+	return "2. Самовывоз."
+}
+
+func (p PickUpStrategy) Deliver(order *Order) {
+	fmt.Println("Ваш заказ будет ждать вас!")
+}
+
 func main() {
 	orderManager := GetOrderManager()
 
@@ -178,8 +205,23 @@ func main() {
 		}
 	}
 
-	fmt.Print("Напишите пожалуйста ваш адрес: ")
-	fmt.Scanln(&order.Address)
+	// Strategy
+	fmt.Println("Какой способ получение заказа вам удобен?:")
+	deliverOptions := []DeliverStrategy{HomeDeliveryStrategy{}, PickUpStrategy{}}
+
+	for i, j := range deliverOptions {
+		fmt.Println(j.GetDeliverOption())
+		i += 1
+	}
+
+	var userDeliverOption int
+	fmt.Scanln(&userDeliverOption)
+
+	if userDeliverOption >= 1 && userDeliverOption <= len(deliverOptions) {
+		deliverOptions[userDeliverOption-1].Deliver(&order)
+	} else {
+		fmt.Println("Ошибка ввода, повторите попытку позже.")
+	}
 
 	switch pizzaChoice {
 	case 1:
@@ -198,7 +240,14 @@ func main() {
 	orderManager.AddOrder(order)
 
 	fmt.Println("\nДетали заказа:")
-	fmt.Printf("Адрес заказа: %s\n", order.Address)
+
+	if userDeliverOption == 1 {
+		fmt.Println("Способ получение заказа - Доставка: ")
+		fmt.Printf("Адрес заказа: %s\n", order.Address)
+	} else {
+		fmt.Println("Способ получение заказа - Самовывоз. ")
+	}
+
 	fmt.Println("Продукты:")
 	for _, pizza := range order.Pizzas {
 		fmt.Printf("- %s: Тенге %.2f\n", pizza.Name, pizza.Price)
