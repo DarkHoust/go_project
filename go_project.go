@@ -240,6 +240,7 @@ func main() {
 	orderManager.AddOrder(order)
 
 	fmt.Println("\nДетали заказа:")
+
 	if userDeliverOption == 1 {
 		fmt.Println("Способ получение заказа - Доставка: ")
 		fmt.Printf("Адрес заказа: %s\n", order.Address)
