@@ -1,7 +1,7 @@
 package main
 
 type Menu struct {
-	Menu []MenuItem
+	Items []MenuItem
 }
 
 type MenuItem struct {
@@ -13,7 +13,7 @@ var menuInstance *Menu
 
 func getMenu() *Menu {
 	if menuInstance == nil {
-		menuInstance = &Menu{Menu: []MenuItem{
+		menuInstance = &Menu{Items: []MenuItem{
 			{Name: "Pepperoni Pizza", Price: 1700},
 			{Name: "Cheese Pizza", Price: 1500},
 			{Name: "4 Season Pizza", Price: 1900},
@@ -22,13 +22,4 @@ func getMenu() *Menu {
 		}}
 	}
 	return menuInstance
-}
-
-func (m *Menu) getPrice(name string) int {
-	for _, i := range m.Menu {
-		if i.Name == name {
-			return i.Price
-		}
-	}
-	return 0
 }
