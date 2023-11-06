@@ -70,7 +70,7 @@ func (om *OrderManager) GetOrders() []Order {
 	return om.Orders
 }
 
-// Паттерн стратегии: Определяет интерфейс для высчета общей стоимости заказа
+// Определяет интерфейс для высчета общей стоимости заказа
 type PricingStrategy interface {
 	CalculateTotal(order Order) float64
 }
