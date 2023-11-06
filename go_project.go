@@ -144,7 +144,6 @@ type HomeDeliveryStrategy struct{}
 func (home HomeDeliveryStrategy) GetDeliverOption() string {
 	return "1. Доставка до дома."
 }
-
 func (home HomeDeliveryStrategy) Deliver(order *Order) {
 	fmt.Println("Напишите пожалуйста ваш адрес: ")
 	reader := bufio.NewReader(os.Stdin)
@@ -181,18 +180,29 @@ func main() {
 	order := Order{Address: ""}
 
 	fmt.Println("Menu:")
+	fmt.Println("Ассортимент пиццы:")
 	fmt.Println("1. Пицца Пепперони (2500 тенге)")
 	fmt.Println("2. Пицца Маргарита (2000 Тенге)")
-	fmt.Println("3. Картошка фри (600 тенге)")
-	fmt.Println("4. Картошка по деревенски (800 тенге)")
-	fmt.Println("5. Каппучино (790 тенге)")
-	fmt.Println("6. Латте (890 тенге)")
-	fmt.Println("7. Пепси (400.00 тенге)")
-	fmt.Println("8. Миринда (400.00 тенге)")
-	fmt.Println("9. Севенап (400.00 тенге)")
-	fmt.Println("10. Тирамису (1350 тенге)")
-	fmt.Println("11. Брауни (900 тенге)")
-	fmt.Print("Выберите пиццу (1-2): ")
+	fmt.Println("3. Пицца Аррива (3000 тенге)")
+	fmt.Println("4. Пицца Карбонара (3000 тенге)")
+	fmt.Println("5. Пицца 4 сыра (3200 тенге)\n")
+	fmt.Println("Холодные напитки: ")
+	fmt.Println("1. Пепси 1 литр (400 тенге)")
+	fmt.Println("2. Фанта 1 литр (400 тенге)")
+	fmt.Println("3. Спрайт 1 литр (400 тенге)")
+	fmt.Println("4. Piko Pulpy - апельсин 1 литр (500 тенге)\n")
+	fmt.Println("Закуски: ")
+	fmt.Println("1. Картошка фри (600 тенге)")
+	fmt.Println("2. Картошка по деревенски (800 тенге)\n")
+	fmt.Println("Кофе:")
+	fmt.Println("1. Каппучино (790 тенге)")
+	fmt.Println("2. Латте (890 тенге)")
+	fmt.Println("3. Американо (690 тенге)\n")
+	fmt.Println("Десерты:")
+	fmt.Println("1. Тирамису (1350 тенге)")
+	fmt.Println("2. Панкейки (1000 тенге)")
+	fmt.Println("3. Моти (890 тенге)")
+	fmt.Print("Выберите пиццу (1-5): ")
 	var pizzaChoice int
 	_, _ = fmt.Scanln(&pizzaChoice)
 	switch pizzaChoice {
@@ -202,42 +212,33 @@ func main() {
 		order.Pizzas = append(order.Pizzas, Pizza{Name: "Пицца Маргарита", Price: 2000})
 	}
 
-	fmt.Print("Вы хотите добавить доп.сыр? (да/нет): ")
-	var extraCheese string
-	_, _ = fmt.Scanln(&extraCheese)
-	if extraCheese == "да" {
-		extraCheeseDecorator := ExtraCheeseDecorator{}
-		for i := range order.Pizzas {
-			order.Pizzas[i] = extraCheeseDecorator.Decorate(order.Pizzas[i])
-		}
-	}
-
 	fmt.Print("Вы хотите заказать напиток? (да/нет): ")
 	var orderDrink string
-	_, _ = fmt.Scanln(&orderDrink)
+	fmt.Scanln(&orderDrink)
 
 	if orderDrink == "да" {
-		fmt.Print("Выберите напиток (7-9): ")
+		fmt.Print("Выберите напиток (1-4): ")
 		var drinkChoice int
-		_, _ = fmt.Scanln(&drinkChoice)
+		fmt.Scanln(&drinkChoice)
 		switch drinkChoice {
-		case 7:
+		case 1:
 			order.Drinks = append(order.Drinks, Drink{Name: "Пепси", Price: 400})
-		case 8:
-			order.Drinks = append(order.Drinks, Drink{Name: "Миринда", Price: 400})
-		case 9:
-			order.Drinks = append(order.Drinks, Drink{Name: "Севенап", Price: 400})
-
+		case 2:
+			order.Drinks = append(order.Drinks, Drink{Name: "Фанта", Price: 400})
+		case 3:
+			order.Drinks = append(order.Drinks, Drink{Name: "Спрайт", Price: 400})
+		case 4:
+			order.Drinks = append(order.Drinks, Drink{Name: "Pico Pulpy", Price: 500})
 		}
 	}
 
-	fmt.Print("Выберите закуску (3-4): ")
+	fmt.Print("Выберите закуску (1-2): ")
 	var snackChoice int
 	_, _ = fmt.Scanln(&snackChoice)
 	switch snackChoice {
-	case 3:
+	case 1:
 		order.Snacks = append(order.Snacks, Snack{Name: "Картошка фри", Price: 600})
-	case 4:
+	case 2:
 		order.Snacks = append(order.Snacks, Snack{Name: "Картошка по деревенски", Price: 800})
 	}
 
@@ -250,10 +251,12 @@ func main() {
 		var coffeeChoice int
 		_, _ = fmt.Scanln(&coffeeChoice)
 		switch coffeeChoice {
-		case 5:
+		case 1:
 			order.Coffees = append(order.Coffees, Coffee{Name: "Каппучино", Price: 790})
-		case 6:
+		case 2:
 			order.Coffees = append(order.Coffees, Coffee{Name: "Латте", Price: 890})
+		case 3:
+			order.Coffees = append(order.Coffees, Coffee{Name: "Американо", Price: 690})
 		}
 	}
 
@@ -262,14 +265,16 @@ func main() {
 	_, _ = fmt.Scanln(&orderDessert)
 
 	if orderDessert == "да" {
-		fmt.Print("Выберите десерт (10-11): ")
+		fmt.Print("Выберите десерт (1-3): ")
 		var dessertChoice int
 		_, _ = fmt.Scanln(&dessertChoice)
 		switch dessertChoice {
-		case 10:
+		case 1:
 			order.Desserts = append(order.Desserts, Dessert{Name: "Тирамису", Price: 1350})
-		case 11:
-			order.Desserts = append(order.Desserts, Dessert{Name: "Брауни", Price: 900})
+		case 2:
+			order.Desserts = append(order.Desserts, Dessert{Name: "Панкейки", Price: 1000})
+		case 3:
+			order.Desserts = append(order.Desserts, Dessert{Name: "Моти", Price: 890})
 		}
 	}
 
@@ -292,6 +297,23 @@ func main() {
 		return
 	}
 
+	switch pizzaChoice {
+	case 1:
+		order.Pizzas = append(order.Pizzas, Pizza{Name: "Пицца Пепперони", Price: 2500})
+	case 2:
+		order.Pizzas = append(order.Pizzas, Pizza{Name: "Пицца Маргарита", Price: 2000})
+	case 3:
+		order.Pizzas = append(order.Pizzas, Pizza{Name: "Пицца Аррива", Price: 2000})
+	case 4:
+		order.Pizzas = append(order.Pizzas, Pizza{Name: "Пицца Карбонара", Price: 2000})
+	case 5:
+		order.Pizzas = append(order.Pizzas, Pizza{Name: "Пицца 4 сыра", Price: 2000})
+	}
+
+	extraCheeseDecorator := ExtraCheeseDecorator{}
+	for i := range order.Pizzas {
+		order.Pizzas[i] = extraCheeseDecorator.Decorate(order.Pizzas[i])
+	}
 	pricingStrategy := StandardPricingStrategy{}
 	order.Total = pricingStrategy.CalculateTotal(order, promo)
 
