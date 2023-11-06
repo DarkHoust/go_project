@@ -26,11 +26,11 @@ func (u *User) Update(message string) {
 // OrderManager добавляем список подписчиков и методы для управления ими
 type OrderManager struct {
 	Orders    []Order
-	Observers []Observer
+	Observers []User
 }
 
-func (om *OrderManager) AddObserver(observer Observer) {
-	om.Observers = append(om.Observers, observer)
+func (om *OrderManager) AddObserver(user *User) {
+	om.Observers = append(om.Observers, *user)
 }
 
 func (om *OrderManager) NotifyObservers(message string) {
